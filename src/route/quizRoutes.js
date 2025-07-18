@@ -2,10 +2,9 @@ const express = require("express");
 const router = express.Router();
 const Question = require("../model/questionModel");
 
-// API để nhập nhiều câu hỏi từ JSON
 router.post("/import", async (req, res) => {
     try {
-        const questions = req.body; // Nhận danh sách câu hỏi từ request
+        const questions = req.body; 
         if (!Array.isArray(questions) || questions.length === 0) {
             return res.status(400).json({ message: "Dữ liệu không hợp lệ!" });
         }

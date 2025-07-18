@@ -35,7 +35,7 @@ module.exports = {
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
             .setAuthor({ name: 'Danh sách lệnh', iconURL: interaction.user.displayAvatarURL() })
-            .setDescription(`📌 Prefix của bot là \`${prefix}\` (chỉ áp dụng cho lệnh prefix)`);
+            .setDescription(`Dưới đây là danh sách lệnh của bot`);
 
         for (const [category, commands] of Object.entries(categories)) {
             embed.addFields({

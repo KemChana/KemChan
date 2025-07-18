@@ -41,7 +41,6 @@ module.exports = {
                 harvestedCrops.push(crop.name);
                 if (!user.storage) user.storage = new Map();
                 if (!user.storage.get) {
-                    // convert object to Map (if from Mongo)
                     user.storage = new Map(Object.entries(user.storage));
                 }
                 user.storage.set(crop.name, (user.storage.get(crop.name) || 0) + 1);
@@ -52,7 +51,6 @@ module.exports = {
 
         farm.crops = newCrops;
 
-        // Convert Map to plain object for MongoDB
         if (user.storage instanceof Map) {
             user.storage = Object.fromEntries(user.storage);
         }

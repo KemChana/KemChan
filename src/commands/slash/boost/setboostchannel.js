@@ -19,6 +19,6 @@ module.exports = {
         config.boostChannelId = channel.id;
         await config.save();
 
-        await interaction.reply(`✅ Đã thiết lập kênh boost là ${channel}`);
+        await interaction.reply(`Đã thiết lập kênh boost là ${channel}`);
     }
 };

@@ -10,7 +10,7 @@ module.exports = {
     async execute(interaction) {
         const userId = interaction.user.id;
         const now = Date.now();
-        const cooldownTime = 6 * 60 * 60 * 1000; // 6 giờ
+        const cooldownTime = 6 * 60 * 60 * 1000; 
 
         try {
             let user = await User.findOne({ userId });

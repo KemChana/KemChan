@@ -1,9 +1,10 @@
 const mongoose = require('mongoose');
 
 const sentImageSchema = new mongoose.Schema({
-    guildId: { type: String, required: true },
-    content: { type: String, required: true },
-    fileName: { type: String, required: true },
+    guildId: { type: String, required: true },    
+    content: { type: String, required: true },    
+    fileName: { type: String, required: true },   
+    url: { type: String, required: true },         
     sentAt: { type: Date, default: Date.now }
 });
 

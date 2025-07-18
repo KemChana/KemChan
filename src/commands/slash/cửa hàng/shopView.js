@@ -1,7 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require('discord.js');
 const ShopItem = require('../../../model/shopItem');
 
-// Hàm chuyển ms thành thời gian
 function formatExpire(ms) {
     if (!ms) return 'Vĩnh viễn';
     const seconds = Math.floor(ms / 1000);
@@ -14,7 +13,6 @@ function formatExpire(ms) {
     return `${days} ngày`;
 }
 
-// Hàm tạo embed + nút theo category & page
 async function buildShop(interaction, category = 'main', page = 0) {
     const limit = 5;
     const items = await ShopItem.find({ category }).sort({ createdAt: -1 });
@@ -23,7 +21,7 @@ async function buildShop(interaction, category = 'main', page = 0) {
 
     const embed = new EmbedBuilder()
         .setThumbnail(interaction.client.user.displayAvatarURL({ extension: 'png', size: 512 }))
-        .setTitle(`** KemChan's Shop**`)
+        .setTitle(`** Kem's Shop**`)
         .setColor(category === 'main' ? '#FFA500' : '#00BFFF')
         .setDescription(
             sliced.length === 0
@@ -37,7 +35,6 @@ async function buildShop(interaction, category = 'main', page = 0) {
         )
         .setFooter({ text: `Trang ${page + 1} / ${Math.max(totalPages, 1)}` });
 
-    // Hàng 1: Phân trang
     const paginationRow = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setCustomId(`shop_prev_${category}_${page}`)
@@ -51,7 +48,6 @@ async function buildShop(interaction, category = 'main', page = 0) {
             .setDisabled(page >= totalPages - 1)
     );
 
-    // Hàng 2: Chọn category
     const categoryRow = new ActionRowBuilder().addComponents(
         new ButtonBuilder()
             .setCustomId(`shop_category_main_${page}`)
@@ -76,5 +72,5 @@ module.exports = {
         await interaction.reply({ embeds: [embed], components });
     },
 
-    buildShop // Export để dùng trong interactionCreate
+    buildShop 
 };

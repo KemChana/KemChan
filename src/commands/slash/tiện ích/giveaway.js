@@ -5,7 +5,7 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('giveaway')
         .setDescription('Tạo một giveaway')
-        .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
+        // .setDefaultMemberPermissions(PermissionFlagsBits.Administrator)
         .addStringOption(opt =>
             opt.setName('description').setDescription('Mô tả quà tặng').setRequired(true))
         .addIntegerOption(opt =>
@@ -20,7 +20,7 @@ module.exports = {
         const duration = ms(timeStr);
 
         if (!duration || duration < 10000) {
-            return interaction.reply({ content: '❌ Thời gian không hợp lệ.', flags: 64 });
+            return interaction.reply({ content: 'Thời gian không hợp lệ.', flags: 64 });
         }
         const endTime = Math.floor((Date.now() + duration) / 1000);
         const embed = new EmbedBuilder()

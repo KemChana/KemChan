@@ -1,10 +1,8 @@
-const fs = require('fs');
-const path = require('path');
-const { AttachmentBuilder } = require('discord.js');
-const ImageChannel = require('../model/imageChannelModel');
-const SentImage = require('../model/SentImageModel');
+const GuildConfig = require('../model/guildConfig');
+const SentImage = require('../model/sentImageModel');
+const SendHistory = require('../model/sendHistoryModel');
+const { EmbedBuilder } = require('discord.js');
 
-// Bộ nhớ RAM để chống xử lý song song trùng lặp
 const processingLocks = new Set();
 
 async function sendImageByConfig(message) {
@@ -12,54 +10,46 @@ async function sendImageByConfig(message) {
     const content = message.content.trim().toLowerCase();
     const lockKey = `${guildId}:${content}`;
 
-    // ✅ Nếu đang xử lý rồi thì bỏ qua
     if (processingLocks.has(lockKey)) return;
     processingLocks.add(lockKey);
 
     try {
-        const config = await ImageChannel.findOne({ guildId });
-        if (!config || message.channel.id !== config.channelId) return;
+        const config = await GuildConfig.findOne({ guildId });
+        if (!config || message.channel.id !== config.imageChannelId) return;
 
-        const folderPath = path.join(__dirname, '..', 'assets', 'images', content);
-        if (!fs.existsSync(folderPath)) return;
-
-        const allFiles = fs.readdirSync(folderPath).filter(file =>
-            /\.(png|jpe?g|gif|webp)$/i.test(file)
-        );
-
-        if (allFiles.length === 0) {
-            return await message.reply('Thư mục ảnh trống.');
+        const allImages = await SentImage.find({ content });
+        if (allImages.length === 0) {
+            return await message.reply('Không có ảnh nào trong nội dung này.');
         }
 
-        // Lấy danh sách ảnh đã gửi
-        const sentDocs = await SentImage.find({ guildId, content });
-        const sentFileNames = sentDocs.map(doc => doc.fileName);
+        const history = await SendHistory.find({ guildId, content });
+        const sentFileNames = history.map(doc => doc.fileName);
 
-        // Loại bỏ ảnh đã gửi
-        let remainingFiles = allFiles.filter(file => !sentFileNames.includes(file));
+        let remaining = allImages.filter(img => !sentFileNames.includes(img.fileName));
 
-        // Nếu gửi hết rồi thì reset
-        if (remainingFiles.length === 0) {
-            await SentImage.deleteMany({ guildId, content });
-            remainingFiles = allFiles;
+        if (remaining.length === 0) {
+            await SendHistory.deleteMany({ guildId, content });
+            remaining = allImages;
         }
 
-        // Chọn ngẫu nhiên ảnh
-        const randomImage = remainingFiles[Math.floor(Math.random() * remainingFiles.length)];
-        const imagePath = path.join(folderPath, randomImage);
-        const attachment = new AttachmentBuilder(imagePath);
+        const randomImage = remaining[Math.floor(Math.random() * remaining.length)];
 
-        // Gửi ảnh
-        await message.channel.send({ files: [attachment] });
+        const embed = new EmbedBuilder()
+            .setImage(randomImage.url)
+            .setColor('Random');
 
-        // Ghi nhận ảnh đã gửi
-        await SentImage.create({ guildId, content, fileName: randomImage });
+        await message.channel.send({ files: [randomImage.url] });
 
-    } catch (error) {
-        console.error('Lỗi khi gửi ảnh:', error);
-        await message.reply('❌ Đã xảy ra lỗi khi gửi ảnh.');
+        await SendHistory.create({
+            guildId,
+            content,
+            fileName: randomImage.fileName,
+        });
+
+    } catch (err) {
+        console.error('Lỗi khi gửi ảnh:', err);
+        await message.reply('Có lỗi xảy ra khi gửi ảnh.');
     } finally {
-        // ✅ Bỏ khoá sau khi xử lý xong
         processingLocks.delete(lockKey);
     }
 }

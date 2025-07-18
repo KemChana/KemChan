@@ -3,6 +3,7 @@ const GuildConfig = require('../model/guildConfig');
 const moment = require('moment-timezone');
 
 module.exports = async (oldMember, newMember) => {
+    return;
     if (oldMember.premiumSince || !newMember.premiumSince) return;
 
     const config = await GuildConfig.findOne({ guildId: newMember.guild.id });

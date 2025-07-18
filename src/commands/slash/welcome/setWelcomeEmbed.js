@@ -1,8 +1,10 @@
-const { SlashCommandBuilder, EmbedBuilder, AttachmentBuilder, PermissionFlagsBits } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder, PermissionFlagsBits } = require('discord.js');
 const GuildConfig = require('../../../model/guildConfig');
-const fs = require('fs');
-const path = require('path');
+const { v2: cloudinary } = require('cloudinary');
 const fetch = require('node-fetch');
+const config = require('../../../config/config'); // đường dẫn tùy project
+
+cloudinary.config(config.cloudinary); // thiết lập cloudinary
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -23,30 +25,58 @@ module.exports = {
         const footer = interaction.options.getString('footer')?.replace(/\\n/g, '\n') || null;
         const image = interaction.options.getAttachment('image');
 
-        let imageFilename = null;
+        let imageUrl = null;
 
-        // Lưu file ảnh vào thư mục assets nếu có ảnh
+        // Lấy config hiện tại trước khi upload
+        let dbConfig = await GuildConfig.findOne({ guildId }) || new GuildConfig({ guildId });
+
+        // Nếu có ảnh mới, thì xoá ảnh cũ nếu có và upload ảnh mới
         if (image) {
-            const ext = path.extname(image.name);
-            imageFilename = `welcome_${guildId}${ext}`;
-            const imagePath = path.join(__dirname, '../../../assets/welcome', imageFilename);
+            if (dbConfig.welcomeEmbed?.image) {
+                const oldUrl = dbConfig.welcomeEmbed.image;
+                const matches = oldUrl.match(/\/upload\/(?:v\d+\/)?(.+)\.(jpg|jpeg|png|gif|webp)/);
+                if (matches && matches[1]) {
+                    const publicId = matches[1];
+                    try {
+                        await cloudinary.uploader.destroy(publicId, { resource_type: 'image' });
+                    } catch (e) {
+                        console.warn('Không thể xóa ảnh cũ:', e.message);
+                    }
+                }
+            }
 
+            // Tải và upload ảnh mới
             const response = await fetch(image.url);
-            const buffer = await response.arrayBuffer();
-            fs.writeFileSync(imagePath, Buffer.from(buffer));
+            const buffer = await response.buffer();
+
+            const uploadResult = await new Promise((resolve, reject) => {
+                const { Readable } = require('stream');
+                const uploadStream = cloudinary.uploader.upload_stream({
+                    folder: 'discord/welcome',
+                    public_id: `welcome_${guildId}`,
+                    resource_type: 'image',
+                    overwrite: true
+                }, (error, result) => {
+                    if (error) return reject(error);
+                    resolve(result);
+                });
+
+                Readable.from(buffer).pipe(uploadStream);
+            });
+
+            imageUrl = uploadResult.secure_url;
         }
 
-        let config = await GuildConfig.findOne({ guildId }) || new GuildConfig({ guildId });
-
-        config.welcomeEmbed = {
+        // Cập nhật DB
+        dbConfig.welcomeEmbed = {
             title,
             description,
-            image: imageFilename, // lưu tên file vào field `image`
+            image: imageUrl || dbConfig.welcomeEmbed?.image || null,
             footer,
             color
         };
 
-        await config.save();
+        await dbConfig.save();
 
         // Tạo Embed preview
         const embed = new EmbedBuilder()
@@ -55,19 +85,11 @@ module.exports = {
             .setColor(color);
 
         if (footer) embed.setFooter({ text: footer });
-
-        const files = [];
-
-        if (imageFilename) {
-            const filePath = path.join(__dirname, '../../../assets/welcome', imageFilename);
-            embed.setImage(`attachment://${imageFilename}`);
-            files.push(new AttachmentBuilder(filePath, { name: imageFilename }));
-        }
+        if (dbConfig.welcomeEmbed.image) embed.setImage(dbConfig.welcomeEmbed.image);
 
         await interaction.reply({
             content: 'Đã lưu embed chào mừng. Đây là bản preview:',
-            embeds: [embed],
-            files
+            embeds: [embed]
         });
     }
 };

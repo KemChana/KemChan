@@ -4,18 +4,21 @@ const { EmbedBuilder } = require('discord.js');
 const wordGameManager = require('../utils/wordGameManager');
 const countingGameManager = require('../utils/countingGameManager');
 const GuildConfig = require('../model/guildConfig');
+const allowedGuilds = [
+    process.env.GUILD_ID,
+    "1081870325291159604"
+];
 module.exports = async (client, message) => {
     if (message.author.bot || !message.guild) return;
     const content = message.content.trim().toLowerCase();
     const channelId = message.channel.id;
     const guildId = message.guild.id;
-    // ✅ Gửi ảnh theo keyword
-    if (['seg', 'girl', 'femboy', 'futa'].includes(content)) {
+    if (['seg', 'girl', 'femboy', 'futa', 'gay', 'cosplay'].includes(content)) {
+        // return;
         await sendImageByConfig(message);
         return;
     }
 
-    // ✅ Hiện help nếu tag bot
     if (content === `<@${client.user.id}>` || content === `<@!${client.user.id}>`) {
         const embed = new EmbedBuilder()
             .setColor('#0099ff')
@@ -30,12 +33,13 @@ module.exports = async (client, message) => {
         return await message.channel.send({ embeds: [embed] });
     }
 
-    // ✅ Ưu tiên xử lý prefix command (dù đang chơi game)
     if (content.startsWith(config.prefix)) {
+        return
         const args = message.content.slice(config.prefix.length).trim().split(/ +/);
         const commandName = args.shift().toLowerCase();
         const command = client.prefixCommands.get(commandName);
-        if (message.guild.id !== process.env.GUILD_ID) {
+        if (!allowedGuilds.includes(message.guild.id)) {
+            console.warn(`⚠ Lệnh "${commandName}" được gọi trong server không hợp lệ: ${message.guild.id}`);
             message.channel.send("Bot chỉ hoạt động trong server chính. Vui lòng lien hệ admin để được hỗ trợ.");
             return;
         };
@@ -46,11 +50,10 @@ module.exports = async (client, message) => {
                 console.error(`Lỗi khi thực hiện lệnh ${commandName}:`, error);
                 message.reply("Đã xảy ra lỗi khi thực hiện lệnh.");
             }
-            return; // ⛔ Không xử lý nối từ nếu là lệnh
+            return; 
         }
     }
 
-    // ✅ Xử lý nối từ (chỉ khi không phải lệnh)
     const state = wordGameManager.getState(channelId);
     if (state?.started) {
         const word = content;

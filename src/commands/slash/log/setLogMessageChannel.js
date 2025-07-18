@@ -18,7 +18,7 @@ module.exports = {
             if (!config) {
                 config = new GuildConfig({
                     guildId,
-                    wordGameChannelId: 'unset', // Hoặc null tùy vào logic tổng
+                    wordGameChannelId: 'unset', 
                     logMessageChannelId: channelId
                 });
             } else {

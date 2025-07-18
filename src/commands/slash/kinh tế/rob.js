@@ -30,7 +30,7 @@ module.exports = {
             }
 
             const now = Date.now();
-            const cooldownTime = 12 * 60 * 60 * 1000; // 12 giờ
+            const cooldownTime = 12 * 60 * 60 * 1000; 
 
             if (now - user.lastRob < cooldownTime) {
                 const remaining = cooldownTime - (now - user.lastRob);
@@ -39,7 +39,7 @@ module.exports = {
                 return interaction.reply(`Bạn cần đợi ${hours} giờ ${minutes} phút nữa để lên kế hoạch!.`);
             }
 
-            const chance = Math.random(); // 50%
+            const chance = Math.random(); 
             const amount = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
 
             if (chance < 0.5) {

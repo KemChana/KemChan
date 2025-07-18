@@ -14,10 +14,10 @@ module.exports = {
         ),
 
     async execute(interaction) {
-        const allowedUserId = '1075679018277404702';
-        if (interaction.user.id !== allowedUserId) {
-            return interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', flags: 64 });
-        }
+        // const allowedUserId = '1075679018277404702';
+        // if (interaction.user.id !== allowedUserId) {
+        //     return interaction.reply({ content: 'Bạn không có quyền sử dụng lệnh này.', flags: 64 });
+        // }
 
         const newWord = interaction.options.getString('word').trim().toLowerCase();
         const parts = newWord.split(/\s+/);

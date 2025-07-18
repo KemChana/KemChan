@@ -33,7 +33,7 @@ module.exports = {
             .filter(role => !!role);
 
         if (matchedRoles.length === 0) {
-            return interaction.reply({ content: "❌ Không tìm thấy role nào hợp lệ.", flags: 64 });
+            return interaction.reply({ content: "Không tìm thấy role nào hợp lệ.", flags: 64 });
         }
 
         const select = new StringSelectMenuBuilder()
@@ -51,7 +51,7 @@ module.exports = {
         const row = new ActionRowBuilder().addComponents(select);
 
         await channel.send({
-            content: "🎯 Chọn role bạn muốn gán/xoá:",
+            content: "Chọn role bạn muốn gán/xoá:",
             components: [row],
         });
 

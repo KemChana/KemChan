@@ -1,13 +1,19 @@
-const ImageChannel = require('../model/imageChannelModel');
+const GuildConfig = require('../model/guildConfig');
 
 async function setImageChannel(guildId, channelId) {
-    return await ImageChannel.findOneAndUpdate(
+    return await GuildConfig.findOneAndUpdate(
         { guildId },
-        { channelId },
+        { imageChannelId: channelId },
         { upsert: true, new: true }
     );
 }
 
+async function getImageChannel(guildId) {
+    const config = await GuildConfig.findOne({ guildId });
+    return config?.imageChannelId || null;
+}
+
 module.exports = {
     setImageChannel,
+    getImageChannel,
 };

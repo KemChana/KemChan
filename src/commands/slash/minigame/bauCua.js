@@ -50,16 +50,13 @@ module.exports = {
             });
         }
 
-        // Trừ tiền cược ban đầu
         user.money -= betAmount;
 
-        // Quay 5 lần
         const results = Array.from({ length: 5 }, () =>
             choices[Math.floor(Math.random() * choices.length)]
         );
         const resultsWithEmoji = results.map(item => emojiMap[item]);
 
-        // Tính số lần trúng và tiền thắng
         const winCount = results.filter(item => item === betChoice).length;
         const winAmount = betAmount * winCount;
 

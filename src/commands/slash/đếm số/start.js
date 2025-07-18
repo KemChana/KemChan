@@ -11,7 +11,6 @@ module.exports = {
         const guildId = interaction.guildId;
         const channelId = interaction.channel.id;
 
-        // Tìm hoặc tạo cấu hình Guild
         let config = await GuildConfig.findOne({ guildId });
         if (!config) {
             config = new GuildConfig({ guildId });
@@ -20,7 +19,6 @@ module.exports = {
         config.countingChannelId = channelId;
         await config.save();
 
-        // Khởi tạo trò chơi Counting
         countingGameManager.startCounting(channelId);
 
         await interaction.reply({

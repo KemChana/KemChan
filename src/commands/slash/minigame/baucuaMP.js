@@ -78,7 +78,6 @@ module.exports = {
                 return i.reply({ content: `Bạn không đủ tiền! Cần **${totalCost} xu**, bạn có **${userData.money} xu**.`, flags: 64 });
             }
 
-            // Trừ tiền ngay khi đặt
             userData.money -= totalCost;
             await updateUserData(userId, { money: userData.money });
 
@@ -145,8 +144,7 @@ module.exports = {
 
                     await msg.edit({ embeds: [resultEmbed] });
 
-                    // Tổng kết kết quả
-                    let resultText = '**📜 Kết quả người chơi:**\n';
+                    let resultText = '**Kết quả người chơi:**\n';
                     for (const userId in playerBets) {
                         const { userData, bets } = playerBets[userId];
                         let win = 0;
@@ -159,7 +157,7 @@ module.exports = {
                         }
 
                         const net = win - totalBet;
-                        userData.money += win; // trả thưởng
+                        userData.money += win;
                         await updateUserData(userId, { money: userData.money });
 
                         const tag = `<@${userId}>`;

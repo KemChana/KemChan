@@ -5,7 +5,7 @@ const ms = require('ms');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('shopedit')
-        .setDescription('✏️ Sửa thông tin vật phẩm trong cửa hàng')
+        .setDescription('Sửa thông tin vật phẩm trong cửa hàng')
         .addStringOption(opt => opt.setName('id').setDescription('ID vật phẩm').setRequired(true))
         .addStringOption(opt => opt.setName('name').setDescription('Tên mới').setRequired(false))
         .addIntegerOption(opt => opt.setName('price').setDescription('Giá xu mới').setRequired(false))
@@ -30,15 +30,15 @@ module.exports = {
         if (emoji) updates.emoji = emoji;
         if (expire) {
             const msValue = ms(expire);
-            if (!msValue) return interaction.reply({ content: '❌ Hạn dùng không hợp lệ.', ephemeral: true });
+            if (!msValue) return interaction.reply({ content: 'Hạn dùng không hợp lệ.', ephemeral: true });
             updates.expireAfter = msValue;
         }
 
         const item = await ShopItem.findByIdAndUpdate(id, updates, { new: true });
         if (!item) {
-            return interaction.reply({ content: '❌ Không tìm thấy vật phẩm với ID đã nhập.', ephemeral: true });
+            return interaction.reply({ content: 'Không tìm thấy vật phẩm với ID đã nhập.', ephemeral: true });
         }
 
-        await interaction.reply(`✅ Đã cập nhật vật phẩm **${item.name}** thành công.`);
+        await interaction.reply(`Đã cập nhật vật phẩm **${item.name}** thành công.`);
     }
 };

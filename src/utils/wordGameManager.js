@@ -1,6 +1,6 @@
 const { getWordSet } = require('./loadVietnameseWords');
 
-const gameState = {}; // Shared game state by channel
+const gameState = {};
 
 function startGame(channelId) {
     gameState[channelId] = {

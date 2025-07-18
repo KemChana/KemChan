@@ -8,6 +8,7 @@ function parsePlaceholders(text, member) {
 }
 
 module.exports = async (client, member) => {
+    // return;
     console.log(`Member left: ${member.user.tag} (${member.id}) from guild: ${member.guild.name} (${member.guild.id})`);
     const config = await GuildConfig.findOne({ guildId: member.guild.id });
     if (!config || !config.goodbyeChannelId || !config.goodbyeEmbed) return;

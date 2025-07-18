@@ -1,15 +1,13 @@
-const User = require('../model/userModel'); // Đảm bảo đường dẫn đúng
+const User = require('../model/userModel'); 
 
-// Lấy dữ liệu người dùng từ MongoDB
 const getUserData = async (userId) => {
     try {
         let user = await User.findOne({ userId });
         if (!user) {
-            // Nếu người dùng chưa tồn tại, tạo mới và lưu vào database
             user = new User({ userId, money: 1000, gameInProgress: false });
             await user.save();
         }
-        return user;  // Trả về dữ liệu người dùng
+        return user;  
     } catch (error) {
         console.error('Lỗi khi lấy dữ liệu người dùng:', error);
         throw new Error('Không thể lấy dữ liệu người dùng.');
@@ -17,7 +15,6 @@ const getUserData = async (userId) => {
 };
 
 
-// Cập nhật dữ liệu người dùng
 const updateUserData = async (userId, data) => {
     try {
         const result = await User.updateOne({ userId }, { $set: data });

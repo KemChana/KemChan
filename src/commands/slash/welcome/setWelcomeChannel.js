@@ -24,6 +24,6 @@ module.exports = {
         config.welcomeChannelId = channel.id;
         await config.save();
 
-        await interaction.reply(`✅ Đã thiết lập kênh chào mừng là ${channel}`);
+        await interaction.reply(`Đã thiết lập kênh chào mừng là ${channel}`);
     }
 };

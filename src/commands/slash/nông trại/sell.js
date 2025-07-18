@@ -19,7 +19,6 @@ module.exports = {
             });
         }
 
-        // Xử lý storage: từ object → entries
         const storageEntries = Object.entries(user.storage);
         let totalEarnings = 0;
         let sellDetails = [];
@@ -30,7 +29,7 @@ module.exports = {
                 totalEarnings += earnings;
 
                 sellDetails.push(`**${crop}**: ${quantity} cây → 💵 **+${earnings} xu**`);
-                delete user.storage[crop]; // Xóa khỏi kho sau khi bán
+                delete user.storage[crop]; 
             }
         }
 

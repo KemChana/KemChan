@@ -11,14 +11,14 @@ module.exports = {
         try {
             const questionCount = await Question.countDocuments();
             if (questionCount === 0) {
-                return interaction.reply("❌ Không có câu hỏi nào trong cơ sở dữ liệu!");
+                return interaction.reply("Không có câu hỏi nào trong cơ sở dữ liệu!");
             }
 
             const randomIndex = Math.floor(Math.random() * questionCount);
             const randomQuestion = await Question.findOne().skip(randomIndex);
 
             if (!randomQuestion) {
-                return interaction.reply("⚠️ Lỗi khi lấy câu hỏi!");
+                return interaction.reply("Lỗi khi lấy câu hỏi!");
             }
 
             const { question, options, correctIndex } = randomQuestion;
@@ -57,12 +57,12 @@ module.exports = {
 
             collector.on("end", (collected) => {
                 if (collected.size === 0) {
-                    interaction.channel.send("⌛ Hết thời gian trả lời!");
+                    interaction.channel.send("Hết thời gian trả lời!");
                 }
             });
         } catch (error) {
             console.error("Lỗi khi xử lý /quiz:", error);
-            interaction.reply({ content: "⚠️ Có lỗi xảy ra khi xử lý câu hỏi.", flags: 64 });
+            interaction.reply({ content: "Có lỗi xảy ra khi xử lý câu hỏi.", flags: 64 });
         }
     },
 };

@@ -23,7 +23,6 @@ readyCheck.execute(client);
 client.prefixCommands = new Collection();
 client.slashCommands = new Collection();
 
-// Hàm đệ quy để load command
 function loadCommandsRecursively(dirPath, isSlash = false) {
     const entries = fs.readdirSync(dirPath, { withFileTypes: true });
 
@@ -43,7 +42,6 @@ function loadCommandsRecursively(dirPath, isSlash = false) {
     }
 }
 
-// Load prefix commands
 loadCommandsRecursively(path.join(__dirname, "commands/prefix"), false);
 
 // Load slash commands

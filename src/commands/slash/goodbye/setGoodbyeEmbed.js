@@ -70,7 +70,7 @@ module.exports = {
         }
 
         await interaction.reply({
-            content: '✅ Đã lưu embed từ biệt. Dưới đây là bản xem trước:',
+            content: 'Đã lưu embed tạm biệt. Dưới đây là bản xem trước:',
             embeds: [embed]
         });
     }

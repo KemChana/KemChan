@@ -1,23 +1,28 @@
 const shopview = require('../commands/slash/cửa hàng/shopView');
+const allowedGuilds = [
+    process.env.GUILD_ID,
+    "1081870325291159604"
+];
 module.exports = async (client, interaction) => {
     // Slash command (Chat Input)
-    if (interaction.guild.id !== process.env.GUILD_ID) {
+    if (!allowedGuilds.includes(interaction.guild.id)) {
+        console.warn(`⚠ Slash command "${interaction.commandName}" được gọi trong server không hợp lệ: ${interaction.guild.id}`);
         interaction.reply('Bot chỉ hoạt động trong server chính. Vui lòng liên hệ admin để được hỗ trợ.')
         return
     }
     if (interaction.isChatInputCommand()) {
         const command = client.slashCommands.get(interaction.commandName);
         if (!command) {
-            console.warn(`⚠ Không tìm thấy slash command: ${interaction.commandName}`);
+            console.warn(`Không tìm thấy slash command: ${interaction.commandName}`);
             return;
         }
 
         try {
             await command.execute(interaction, client);
         } catch (error) {
-            console.error(`❌ Lỗi khi thực hiện slash command "${interaction.commandName}":`, error);
+            console.error(`Lỗi khi thực hiện slash command "${interaction.commandName}":`, error);
             const replyPayload = {
-                content: "⚠ Có lỗi xảy ra khi xử lý lệnh.",
+                content: "Có lỗi xảy ra khi xử lý lệnh.",
                 flags: 64,
             };
             if (interaction.replied || interaction.deferred) {
@@ -28,7 +33,6 @@ module.exports = async (client, interaction) => {
         }
     }
 
-    // Select Menu cho reaction role
     else if (interaction.isStringSelectMenu() && interaction.customId === 'reaction_roles_select') {
         const member = interaction.member;
         const selectedRoleIds = interaction.values;
@@ -42,18 +46,17 @@ module.exports = async (client, interaction) => {
             if (removedRoles.length > 0) await member.roles.remove(removedRoles);
 
             await interaction.reply({
-                content: `✅ Đã cập nhật role của bạn.`,
+                content: `Đã cập nhật role của bạn.`,
                 flags: 64,
             });
         } catch (error) {
-            console.error("❌ Lỗi khi xử lý reaction role:", error);
+            console.error("Lỗi khi xử lý reaction role:", error);
             await interaction.reply({
-                content: "⚠ Có lỗi khi cập nhật role.",
+                content: "Có lỗi khi cập nhật role.",
                 flags: 64,
             });
         }
     }
-    // 🔹 Button: phân trang shopview
     else if (interaction.isButton()) {
         const matchCategory = interaction.customId.match(/^shop_category_(main|fishing)_(\d+)$/);
         const matchPage = interaction.customId.match(/^shop_(prev|next)_(main|fishing)_(\d+)$/);
@@ -70,7 +73,6 @@ module.exports = async (client, interaction) => {
         }
     }
 
-    // 🔹 Modal Submit: xử lý cập nhật vật phẩm
     else if (interaction.isModalSubmit() && interaction.customId.startsWith('shopedit_modal_')) {
         const modalHandler = require('../handlers/shopedit/modalSubmit');
         await modalHandler(interaction);

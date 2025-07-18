@@ -5,7 +5,6 @@ const config = require("../config/config.js");
 
 const commands = [];
 
-// Đệ quy duyệt tất cả file trong commands/slash
 function loadCommandsRecursively(dir) {
     const files = fs.readdirSync(dir);
 
@@ -14,7 +13,7 @@ function loadCommandsRecursively(dir) {
         const stat = fs.statSync(fullPath);
 
         if (stat.isDirectory()) {
-            loadCommandsRecursively(fullPath); // Đệ quy thư mục con
+            loadCommandsRecursively(fullPath); 
         } else if (file.endsWith(".js")) {
             const command = require(fullPath);
             if (command.data) {
@@ -42,12 +41,12 @@ const rest = new REST({ version: "10" }).setToken(config.token);
         );
 
         // 🔹 GLOBAL (chậm, nhưng dùng chung toàn server)
-        const temp = await rest.put(
-            Routes.applicationCommands(config.clientId),
-            { body: commands }
-        );
-        console.log(`✅ Đăng ký thành công ${commands.length} slash commands!`);
+        // const temp = await rest.put(
+        //     Routes.applicationCommands(config.clientId),
+        //     { body: commands }
+        // );
+        console.log(`Đăng ký thành công ${commands.length} slash commands!`);
     } catch (error) {
-        console.error("❌ Lỗi khi đăng ký:", error);
+        console.error("Lỗi khi đăng ký:", error);
     }
 })();

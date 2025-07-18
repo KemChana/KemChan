@@ -12,7 +12,6 @@ function getWordSet() {
     return wordSet;
 }
 
-// Tải từ ban đầu khi khởi động
 loadWords();
 
 module.exports = {

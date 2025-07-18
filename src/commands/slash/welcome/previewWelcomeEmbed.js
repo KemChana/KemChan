@@ -32,7 +32,6 @@ module.exports = {
                 iconURL: interaction.user.displayAvatarURL()
             });
 
-        // Xử lý màu
         try {
             if (color) embed.setColor(color);
         } catch {
@@ -45,16 +44,19 @@ module.exports = {
 
         const files = [];
 
+        // if (image) {
+        //     const imagePath = path.join(__dirname, '../../../assets/welcome', image);
+        //     if (fs.existsSync(imagePath)) {
+        //         embed.setImage(`attachment://${image}`);
+        //         files.push(new AttachmentBuilder(imagePath, { name: image }));
+        //     } else {
+        //         embed.setFooter({
+        //             text: 'Ảnh được chỉ định không tồn tại trên máy chủ.'
+        //         });
+        //     }
+        // }
         if (image) {
-            const imagePath = path.join(__dirname, '../../../assets/welcome', image);
-            if (fs.existsSync(imagePath)) {
-                embed.setImage(`attachment://${image}`);
-                files.push(new AttachmentBuilder(imagePath, { name: image }));
-            } else {
-                embed.setFooter({
-                    text: 'Ảnh được chỉ định không tồn tại trên máy chủ.'
-                });
-            }
+            embed.setImage(image);
         }
 
         await interaction.reply({

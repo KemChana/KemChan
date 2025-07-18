@@ -6,10 +6,13 @@ module.exports = {
         .setDescription('Kiểm tra độ trễ của bot'),
 
     async execute(interaction) {
-        const sent = await interaction.reply({ content: 'Pinging...', fetchReply: true });
+        await interaction.reply({ content: 'Pinging...' });
+        const sent = await interaction.fetchReply();
         const latency = sent.createdTimestamp - interaction.createdTimestamp;
         const apiLatency = interaction.client.ws.ping;
 
-        await interaction.editReply(`Pong!\n⏱️ Độ trễ tin nhắn: **${latency}ms**\n📡 Độ trễ API: **${apiLatency}ms**`);
+        await interaction.editReply(`Pong!\nĐộ trễ tin nhắn: **${latency}ms**\nĐộ trễ API: **${apiLatency}ms**`);
+        // await interaction.editReply(`Pong!`)
+        return;
     }
 };

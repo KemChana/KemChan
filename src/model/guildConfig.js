@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 
 const guildConfigSchema = new mongoose.Schema({
     guildId: { type: String, required: true, unique: true },
+    imageChannelId: { type: String, default: null },
+
     wordGameChannelId: { type: String, required: false },
     countingChannelId: { type: String },
     logMessageChannelId: { type: String },

@@ -4,7 +4,7 @@ const ShopItem = require('../../../model/shopItem');
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('shopdelete')
-        .setDescription('🗑️ Xóa vật phẩm khỏi cửa hàng')
+        .setDescription('Xóa vật phẩm khỏi cửa hàng')
         .addStringOption(opt => opt.setName('id').setDescription('ID vật phẩm cần xóa').setRequired(true))
         .setDefaultMemberPermissions(PermissionFlagsBits.Administrator),
 
@@ -13,9 +13,9 @@ module.exports = {
         const item = await ShopItem.findByIdAndDelete(id);
 
         if (!item) {
-            return interaction.reply({ content: '❌ Không tìm thấy vật phẩm với ID đã nhập.', ephemeral: true });
+            return interaction.reply({ content: 'Không tìm thấy vật phẩm với ID đã nhập.', ephemeral: true });
         }
 
-        await interaction.reply(`🗑️ Đã xóa vật phẩm **${item.name}** khỏi cửa hàng.`);
+        await interaction.reply(`Đã xóa vật phẩm **${item.name}** khỏi cửa hàng.`);
     }
 };

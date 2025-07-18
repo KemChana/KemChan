@@ -11,7 +11,7 @@ const {
 } = require('discord.js');
 const { getUserData, updateUserData } = require('../../../service/userService');
 
-let gameRunning = new Set(); // Hỗ trợ nhiều kênh cùng lúc
+let gameRunning = new Set(); 
 
 module.exports = {
     data: new SlashCommandBuilder()

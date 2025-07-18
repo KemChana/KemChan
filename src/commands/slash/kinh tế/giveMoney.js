@@ -55,7 +55,6 @@ module.exports = {
                 { name: 'Người nhận:', value: `<@${receiver.id}>`, inline: true },
                 { name: 'Số tiền:', value: `**${amount} xu**`, inline: false }
             )
-        // .setFooter({ text: 'Nhấn ✅ để xác nhận hoặc ❌ để hủy.' });
 
         const row = new ActionRowBuilder().addComponents(
             new ButtonBuilder().setCustomId('confirm').setLabel('Xác nhận').setStyle(ButtonStyle.Success),

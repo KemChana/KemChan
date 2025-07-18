@@ -10,7 +10,7 @@ module.exports = {
     async execute(interaction) {
         const userId = interaction.user.id;
         const now = Date.now();
-        const cooldown = 6 * 60 * 60 * 1000; // 6 giờ
+        const cooldown = 6 * 60 * 60 * 1000; 
         const reward = Math.floor(Math.random() * (500 - 200 + 1)) + 200;
 
         try {

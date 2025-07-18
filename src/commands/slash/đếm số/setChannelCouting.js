@@ -1,4 +1,3 @@
-// commands/slash/counting/setCountingChannel.js
 const { SlashCommandBuilder, ChannelType } = require('discord.js');
 const GuildConfig = require('../../../model/guildConfig');
 
@@ -25,6 +24,6 @@ module.exports = {
         config.countingChannelId = channel.id;
         await config.save();
 
-        await interaction.reply(`✅ Đã thiết lập kênh counting là <#${channel.id}>.`);
+        await interaction.reply(`Đã thiết lập kênh counting là <#${channel.id}>.`);
     }
 };

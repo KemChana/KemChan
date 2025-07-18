@@ -21,7 +21,7 @@ function parseDuration(input) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('shopadd')
-        .setDescription('🛒 Thêm vật phẩm vào cửa hàng')
+        .setDescription('Thêm vật phẩm vào cửa hàng')
         .addStringOption(opt => opt.setName('name').setDescription('Tên vật phẩm').setRequired(true))
         .addIntegerOption(opt => opt.setName('price').setDescription('Giá xu').setRequired(true))
         .addStringOption(opt => opt.setName('category').setDescription('Giá xu').setRequired(true))
@@ -42,7 +42,7 @@ module.exports = {
             expireAfter = parseDuration(expireInput);
             if (!expireAfter) {
                 return interaction.reply({
-                    content: '❌ Định dạng hạn sử dụng không hợp lệ. Hãy dùng dạng như: `10s`, `5m`, `2h`, `1d`.',
+                    content: 'Định dạng hạn sử dụng không hợp lệ. Hãy dùng dạng như: `10s`, `5m`, `2h`, `1d`.',
                     ephemeral: true
                 });
             }
@@ -59,6 +59,6 @@ module.exports = {
 
         await item.save();
 
-        await interaction.reply(`✅ Đã thêm vật phẩm \`${name}\` vào cửa hàng với giá **${price} xu**${expireAfter ? ` và hạn sử dụng **${expireInput}**` : ''}.`);
+        await interaction.reply(`Đã thêm vật phẩm \`${name}\` vào cửa hàng với giá **${price} xu**${expireAfter ? ` và hạn sử dụng **${expireInput}**` : ''}.`);
     }
 };

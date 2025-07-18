@@ -1,7 +1,9 @@
 # Bỏ qua thư mục node_modules
 node_modules/
+src/assets/images/
 # Bỏ qua file .env (chứa biến môi trường, API keys...)
 .env
+.env copy
 .env.local
 .env.development
 .env.production

@@ -7,7 +7,7 @@ module.exports = {
         .setDescription('Xem bảng xếp hạng người chơi có nhiều xu nhất!'),
 
     async execute(interaction) {
-        await interaction.deferReply(); // Tránh timeout nếu truy vấn lâu
+        // await interaction.deferReply();
 
         const topUsers = await User.find().sort({ money: -1 }).limit(5);
         const allUsers = await User.find().sort({ money: -1 });

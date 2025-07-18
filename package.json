@@ -8,12 +8,15 @@
     "bot": "nodemon ./src/index.js",
     "server": "nodemon ./src/server.js",
     "register": "node ./src/utils/registerCommands.js",
-    "delete": "node ./src/utils/deleteCommands.js"
+    "delete": "node ./src/utils/deleteCommands.js",
+    "upload": "node ./src/utils/uploadImage.js",
+    "clean": "node ./src/utils/cleanDataWordGame.js"
   },
   "dependencies": {
     "@discordjs/voice": "^0.18.0",
     "axios": "^1.7.9",
     "chess.js": "^1.0.0",
+    "cloudinary": "^2.7.0",
     "discord.js": "^14.18.0",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
